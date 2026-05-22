@@ -1,0 +1,10 @@
+# Proyect related
+venv/
+__pycache__/
+*.pyc
+.env
+downloads/
+.DS_Store
+
+# Agents and IA related
+*plan.md*

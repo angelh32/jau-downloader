@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LocalVidDown</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>LocalVidDown</h1>
+    <p class="subtitle">Download videos from YouTube, Facebook, Twitter, and more</p>
+
+    <div class="input-group">
+      <input type="url" id="url-input" placeholder="Paste video URL here..." autofocus>
+      <button id="fetch-btn" onclick="fetchVideo()">Fetch</button>
+    </div>
+
+    <div id="error" class="error hidden"></div>
+
+    <div id="result" class="hidden">
+      <div class="video-info">
+        <img id="thumbnail" src="" alt="Thumbnail">
+        <h2 id="title"></h2>
+      </div>
+      <div class="download-group">
+        <select id="format-select"></select>
+        <button id="download-btn" onclick="downloadVideo()">Download</button>
+      </div>
+    </div>
+
+    <div id="loading" class="loading hidden">
+      <span class="spinner"></span>
+      <span id="loading-text">Processing...</span>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
