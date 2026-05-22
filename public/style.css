@@ -95,6 +95,16 @@ button:disabled {
   font-size: 0.9rem;
 }
 
+.success {
+  background: #112814;
+  border: 1px solid #238636;
+  color: #3fb950;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
 .hidden {
   display: none !important;
 }
@@ -124,6 +134,23 @@ button:disabled {
 .download-group {
   display: flex;
   gap: 0.5rem;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  color: #aaa;
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #1f6feb;
+  cursor: pointer;
 }
 
 #format-select {

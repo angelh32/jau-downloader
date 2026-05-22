@@ -29,12 +29,15 @@ def api_fetch():
 def api_download():
     url = request.args.get("url")
     format_id = request.args.get("format_id")
+    save_to_device = request.args.get("save_to_device", "true").lower() == "true"
 
     if not url or not format_id:
         return jsonify({"error": "Missing url or format_id"}), 400
 
     try:
         filepath = download_video(url, format_id)
+        if not save_to_device:
+            return jsonify({"success": True, "file": os.path.basename(filepath)})
         return send_file(
             filepath,
             as_attachment=True,

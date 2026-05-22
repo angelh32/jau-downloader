@@ -61,6 +61,7 @@ async function fetchVideo() {
 function downloadVideo() {
   const url = document.getElementById("url-input").value.trim();
   const formatId = document.getElementById("format-select").value;
+  const saveToDevice = document.getElementById("save-device").checked;
   const loading = document.getElementById("loading");
   const loadingText = document.getElementById("loading-text");
   const downloadBtn = document.getElementById("download-btn");
@@ -69,16 +70,42 @@ function downloadVideo() {
   loadingText.textContent = "Downloading...";
   downloadBtn.disabled = true;
 
-  window.location.href = `${API_BASE}/api/download?url=${encodeURIComponent(url)}&format_id=${encodeURIComponent(formatId)}`;
+  const params = new URLSearchParams({ url, format_id: formatId, save_to_device: saveToDevice });
 
-  setTimeout(() => {
-    loading.classList.add("hidden");
-    downloadBtn.disabled = false;
-  }, 3000);
+  if (saveToDevice) {
+    window.location.href = `${API_BASE}/api/download?${params}`;
+    setTimeout(() => {
+      loading.classList.add("hidden");
+      downloadBtn.disabled = false;
+    }, 3000);
+  } else {
+    fetch(`${API_BASE}/api/download?${params}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          showSuccess("Video saved to server");
+        } else {
+          showError(data.error || "Download failed");
+        }
+      })
+      .catch((err) => showError(err.message))
+      .finally(() => {
+        loading.classList.add("hidden");
+        downloadBtn.disabled = false;
+      });
+  }
+}
+
+function showSuccess(msg) {
+  const el = document.getElementById("error");
+  el.textContent = msg;
+  el.classList.remove("hidden", "error");
+  el.classList.add("success");
 }
 
 function showError(msg) {
   const el = document.getElementById("error");
   el.textContent = msg;
-  el.classList.remove("hidden");
+  el.classList.remove("hidden", "success");
+  el.classList.add("error");
 }
