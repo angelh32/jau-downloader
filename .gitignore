@@ -6,5 +6,8 @@ __pycache__/
 downloads/
 .DS_Store
 
-# Agents and IA related
-*plan.md*
+# Agents and planning
+planning/
+
+# Docker
+*.tar.gz
