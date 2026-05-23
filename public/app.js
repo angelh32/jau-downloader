@@ -58,7 +58,7 @@ async function fetchVideo() {
   }
 }
 
-function downloadVideo() {
+async function downloadVideo() {
   const url = document.getElementById("url-input").value.trim();
   const formatId = document.getElementById("format-select").value;
   const saveToDevice = document.getElementById("save-device").checked;
@@ -72,27 +72,38 @@ function downloadVideo() {
 
   const params = new URLSearchParams({ url, format_id: formatId, save_to_device: saveToDevice });
 
-  if (saveToDevice) {
-    window.location.href = `${API_BASE}/api/download?${params}`;
-    setTimeout(() => {
-      loading.classList.add("hidden");
-      downloadBtn.disabled = false;
-    }, 3000);
-  } else {
-    fetch(`${API_BASE}/api/download?${params}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          showSuccess("Video saved to server");
-        } else {
-          showError(data.error || "Download failed");
-        }
-      })
-      .catch((err) => showError(err.message))
-      .finally(() => {
-        loading.classList.add("hidden");
-        downloadBtn.disabled = false;
-      });
+  try {
+    const res = await fetch(`${API_BASE}/api/download?${params}`);
+
+    if (saveToDevice) {
+      if (!res.ok) {
+        const err = await res.json();
+        showError(err.error || "Download failed");
+        return;
+      }
+      const blob = await res.blob();
+      const cd = res.headers.get("Content-Disposition") || "";
+      const match = cd.match(/filename="?(.+?)"?$/);
+      const filename = match ? match[1] : "video.mp4";
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(a.href);
+      showSuccess("Download started");
+    } else {
+      const data = await res.json();
+      if (data.success) {
+        showSuccess("Video saved to server");
+      } else {
+        showError(data.error || "Download failed");
+      }
+    }
+  } catch (err) {
+    showError(err.message);
+  } finally {
+    loading.classList.add("hidden");
+    downloadBtn.disabled = false;
   }
 }
 
