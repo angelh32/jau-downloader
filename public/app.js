@@ -58,9 +58,10 @@ async function fetchVideo() {
   }
 }
 
-function downloadVideo() {
+async function downloadVideo() {
   const url = document.getElementById("url-input").value.trim();
   const formatId = document.getElementById("format-select").value;
+  const saveToDevice = document.getElementById("save-device").checked;
   const loading = document.getElementById("loading");
   const loadingText = document.getElementById("loading-text");
   const downloadBtn = document.getElementById("download-btn");
@@ -69,16 +70,63 @@ function downloadVideo() {
   loadingText.textContent = "Downloading...";
   downloadBtn.disabled = true;
 
-  window.location.href = `${API_BASE}/api/download?url=${encodeURIComponent(url)}&format_id=${encodeURIComponent(formatId)}`;
+  const params = new URLSearchParams({ url, format_id: formatId, save_to_device: saveToDevice });
 
-  setTimeout(() => {
+  try {
+    const res = await fetch(`${API_BASE}/api/download?${params}`);
+
+    if (saveToDevice) {
+      if (!res.ok) {
+        const err = await res.json();
+        showError(err.error || "Download failed");
+        return;
+      }
+      const blob = await res.blob();
+      const cd = res.headers.get("Content-Disposition") || "";
+      const match = cd.match(/filename="?(.+?)"?$/);
+      const filename = match ? match[1] : "video.mp4";
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(a.href);
+      showSuccess("Download started");
+    } else {
+      const data = await res.json();
+      if (data.success) {
+        showSuccess("Video saved to server folder");
+      } else {
+        showError(data.error || "Download failed");
+      }
+    }
+  } catch (err) {
+    showError(err.message);
+  } finally {
     loading.classList.add("hidden");
     downloadBtn.disabled = false;
-  }, 3000);
+  }
+}
+
+function showSuccess(msg) {
+  const el = document.getElementById("error");
+  el.textContent = msg;
+  el.classList.remove("hidden", "error");
+  el.classList.add("success");
 }
 
 function showError(msg) {
   const el = document.getElementById("error");
   el.textContent = msg;
-  el.classList.remove("hidden");
+  el.classList.remove("hidden", "success");
+  el.classList.add("error");
+}
+
+async function getClipboard() {
+  try {
+    const text = await navigator.clipboard.readText();
+    document.getElementById("url-input").value = text;
+    fetchVideo();
+  } catch (err) {
+    showError("Failed to read clipboard: " + err.message);
+  }
 }
