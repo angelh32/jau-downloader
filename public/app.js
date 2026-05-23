@@ -94,7 +94,7 @@ async function downloadVideo() {
     } else {
       const data = await res.json();
       if (data.success) {
-        showSuccess("Video saved to server");
+        showSuccess("Video saved to server folder");
       } else {
         showError(data.error || "Download failed");
       }
@@ -119,4 +119,14 @@ function showError(msg) {
   el.textContent = msg;
   el.classList.remove("hidden", "success");
   el.classList.add("error");
+}
+
+async function getClipboard() {
+  try {
+    const text = await navigator.clipboard.readText();
+    document.getElementById("url-input").value = text;
+    fetchVideo();
+  } catch (err) {
+    showError("Failed to read clipboard: " + err.message);
+  }
 }

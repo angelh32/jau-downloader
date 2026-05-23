@@ -74,6 +74,23 @@ button:disabled {
   cursor: not-allowed;
 }
 
+#clipboard-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  width: 44px;
+  height: 44px;
+  background: #238636;
+  color: #fff;
+}
+
+#clipboard-btn svg {
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+}
+
 #fetch-btn {
   background: #238636;
   color: #fff;
