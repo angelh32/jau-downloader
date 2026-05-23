@@ -19,6 +19,9 @@ public/
   index.html     # Single-page UI
   style.css      # Dark theme
   app.js         # Fetch + download logic
+Dockerfile       # python:3.12-slim + ffmpeg, gunicorn CMD
+docker-compose.yml  # Port 3000, volume ./downloads, .env
+.dockerignore    # Excludes .env, venv, downloads from build
 ```
 
 ## Key Conventions
@@ -35,6 +38,23 @@ public/
 | `DOWNLOAD_PATH` | `./downloads` | Where downloaded files land |
 | `MAX_FILESIZE_MB` | `2000` | Reject files above this |
 
+## Docker
+
+```bash
+# Standard build & run
+docker compose up -d --build
+
+# Multi-arch (build amd64 from ARM Mac)
+docker buildx build --platform linux/amd64 -t localviddown:latest --load .
+docker save localviddown:latest | gzip > localviddown.tar.gz
+
+# On target x86 machine:
+gunzip -c localviddown.tar.gz | docker load
+docker compose up -d
+```
+
+> `.env` **must** set `DOWNLOAD_PATH=/downloads` when using Docker (absolute path inside container).
+
 ## Run
 ```bash
 source venv/bin/activate
@@ -44,6 +64,5 @@ gunicorn -w 1 --threads 1 -b 0.0.0.0:3000 app.main:app
 ```
 
 ## V2 Candidates
-- Docker + Docker Compose
 - Concurrency tuning (more workers/threads)
 - Migrate to FastAPI + `run_in_executor` for async

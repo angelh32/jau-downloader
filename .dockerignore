@@ -1,0 +1,10 @@
+.env
+downloads/
+venv/
+__pycache__/
+*.pyc
+.git
+.gitignore
+AGENTS.md
+*.md
+planning/
