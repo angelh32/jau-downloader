@@ -1,5 +1,50 @@
 const API_BASE = "";
 
+async function apiFetch(path, options = {}) {
+  const token = getToken();
+  const headers = { ...options.headers };
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+  const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
+  if (res.status === 401) {
+    clearToken();
+    showAuthOverlay();
+    throw new Error("Authentication required");
+  }
+  return res;
+}
+
+function showScreen(name) {
+  document.querySelectorAll(".screen").forEach((el) => el.classList.add("hidden"));
+  document.getElementById(`screen-${name}`).classList.remove("hidden");
+  document.querySelectorAll(".nav-btn").forEach((btn) => btn.classList.remove("active"));
+  const activeBtn = document.querySelector(`.nav-btn[data-screen="${name}"]`);
+  if (activeBtn) activeBtn.classList.add("active");
+}
+
+function updateAuthUI() {
+  const btn = document.getElementById("auth-toggle-btn");
+  const token = getToken();
+  btn.textContent = token ? "Logout" : "Login";
+}
+
+function showAuthOverlay() {
+  document.getElementById("auth-overlay").classList.remove("hidden");
+}
+
+function hideAuthOverlay() {
+  document.getElementById("auth-overlay").classList.add("hidden");
+}
+
+function switchAuthTab(tab) {
+  document.querySelectorAll(".auth-tab").forEach((t) => t.classList.remove("active"));
+  document.querySelector(`.auth-tab[data-tab="${tab}"]`).classList.add("active");
+  document.getElementById("auth-login-form").classList.toggle("hidden", tab !== "login");
+  document.getElementById("auth-register-form").classList.toggle("hidden", tab !== "register");
+  document.getElementById("auth-error").classList.add("hidden");
+}
+
 async function fetchVideo() {
   const url = document.getElementById("url-input").value.trim();
   if (!url) return;
@@ -17,7 +62,7 @@ async function fetchVideo() {
   fetchBtn.disabled = true;
 
   try {
-    const res = await fetch(`${API_BASE}/api/fetch`, {
+    const res = await apiFetch("/api/fetch", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ url }),
@@ -51,7 +96,9 @@ async function fetchVideo() {
 
     result.classList.remove("hidden");
   } catch (err) {
-    showError(err.message);
+    if (err.message !== "Authentication required") {
+      showError(err.message);
+    }
   } finally {
     loading.classList.add("hidden");
     fetchBtn.disabled = false;
@@ -73,7 +120,7 @@ async function downloadVideo() {
   const params = new URLSearchParams({ url, format_id: formatId, save_to_device: saveToDevice });
 
   try {
-    const res = await fetch(`${API_BASE}/api/download?${params}`);
+    const res = await apiFetch(`/api/download?${params}`);
 
     if (saveToDevice) {
       if (!res.ok) {
@@ -100,7 +147,9 @@ async function downloadVideo() {
       }
     }
   } catch (err) {
-    showError(err.message);
+    if (err.message !== "Authentication required") {
+      showError(err.message);
+    }
   } finally {
     loading.classList.add("hidden");
     downloadBtn.disabled = false;
@@ -130,3 +179,64 @@ async function getClipboard() {
     showError("Failed to read clipboard: " + err.message);
   }
 }
+
+document.addEventListener("DOMContentLoaded", async () => {
+  await checkAuth();
+  updateAuthUI();
+
+  document.querySelectorAll(".nav-btn").forEach((btn) => {
+    btn.addEventListener("click", () => showScreen(btn.dataset.screen));
+  });
+
+  document.getElementById("auth-toggle-btn").addEventListener("click", async () => {
+    if (getToken()) {
+      await logout();
+      updateAuthUI();
+      showScreen("downloader");
+    } else {
+      showAuthOverlay();
+    }
+  });
+
+  document.querySelectorAll(".auth-tab").forEach((tab) => {
+    tab.addEventListener("click", () => switchAuthTab(tab.dataset.tab));
+  });
+
+  document.getElementById("auth-login-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const username = document.getElementById("login-username").value.trim();
+    const password = document.getElementById("login-password").value;
+    const errEl = document.getElementById("auth-error");
+    errEl.classList.add("hidden");
+    try {
+      await login(username, password);
+      updateAuthUI();
+      hideAuthOverlay();
+    } catch (err) {
+      errEl.textContent = err.message;
+      errEl.classList.remove("hidden");
+    }
+  });
+
+  document.getElementById("auth-register-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const username = document.getElementById("reg-username").value.trim();
+    const password = document.getElementById("reg-password").value;
+    const confirm = document.getElementById("reg-confirm").value;
+    const errEl = document.getElementById("auth-error");
+    errEl.classList.add("hidden");
+    if (password !== confirm) {
+      errEl.textContent = "Passwords do not match";
+      errEl.classList.remove("hidden");
+      return;
+    }
+    try {
+      await register(username, password);
+      updateAuthUI();
+      hideAuthOverlay();
+    } catch (err) {
+      errEl.textContent = err.message;
+      errEl.classList.remove("hidden");
+    }
+  });
+});

@@ -4,7 +4,9 @@ __pycache__/
 *.pyc
 .env
 downloads/
+data/
 .DS_Store
+data/
 
 # Agents and planning
 planning/
