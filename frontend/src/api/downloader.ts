@@ -48,3 +48,36 @@ export async function downloadVideo(
   }
   return res;
 }
+
+// ── Down-sessions (stored auth sessions for sites) ──
+
+export interface DownSession {
+  id: number;
+  page: string;
+  created_at: string;
+  modified_at: string;
+}
+
+export interface DownSessionList {
+  cookies: DownSession[];
+}
+
+export async function fetchDownSessions(): Promise<DownSessionList> {
+  return authenticatedApiFetch<DownSessionList>("/api/down-sessions");
+}
+
+export async function uploadDownSession(
+  page: string,
+  cookieRaw: string
+): Promise<DownSession> {
+  return authenticatedApiFetch<DownSession>("/api/down-sessions", {
+    method: "POST",
+    body: JSON.stringify({ page, cookie_raw: cookieRaw }),
+  });
+}
+
+export async function deleteDownSession(id: number): Promise<void> {
+  await authenticatedApiFetch(`/api/down-sessions/${id}`, {
+    method: "DELETE",
+  });
+}
