@@ -118,12 +118,18 @@ export default function ScreenCredentials() {
           <div className="session-modal" onClick={(e) => e.stopPropagation()}>
             <h3>Add Session</h3>
             <p className="subtitle">Paste session data for a site</p>
-            <input
+            <select
               className="input"
-              placeholder="Site name (e.g. facebook.com)"
               value={page}
               onChange={(e) => setPage(e.target.value)}
-            />
+            >
+              <option value="">Select site...</option>
+              <option value="facebook">facebook</option>
+              <option value="youtube">youtube</option>
+              <option value="twitter">twitter</option>
+              <option value="instagram">instagram</option>
+              <option value="tiktok">tiktok</option>
+            </select>
             <textarea
               className="input textarea"
               placeholder="Paste session data here..."
