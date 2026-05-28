@@ -1,4 +1,4 @@
-import { apiFetch } from "./client";
+import { authenticatedApiFetch } from "./client";
 
 export interface VideoInfo {
   title: string;
@@ -16,7 +16,7 @@ export interface VideoFormat {
 export async function fetchVideoInfo(
   url: string
 ): Promise<VideoInfo> {
-  return apiFetch<VideoInfo>("/api/fetch", {
+  return authenticatedApiFetch<VideoInfo>("/api/fetch", {
     method: "POST",
     body: JSON.stringify({ url }),
   });

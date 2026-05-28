@@ -7,7 +7,23 @@ export class AuthError extends Error {
   }
 }
 
-export async function apiFetch<T = unknown>(
+export async function rawApiFetch<T = unknown>(
+  path: string,
+  options: RequestInit = {}
+): Promise<T> {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...(options.headers as Record<string, string>),
+  };
+  const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.error || `Request failed: ${res.status}`);
+  }
+  return res.json();
+}
+
+export async function authenticatedApiFetch<T = unknown>(
   path: string,
   options: RequestInit = {}
 ): Promise<T> {

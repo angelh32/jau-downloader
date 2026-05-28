@@ -1,4 +1,4 @@
-import { apiFetch } from "./client";
+import { rawApiFetch, authenticatedApiFetch } from "./client";
 
 export interface AuthResponse {
   success: boolean;
@@ -18,7 +18,7 @@ export async function login(
   username: string,
   password: string
 ): Promise<AuthResponse> {
-  const data = await apiFetch<AuthResponse>("/api/auth/login", {
+  const data = await rawApiFetch<AuthResponse>("/api/auth/login", {
     method: "POST",
     body: JSON.stringify({ username, password }),
   });
@@ -30,7 +30,7 @@ export async function register(
   username: string,
   password: string
 ): Promise<AuthResponse> {
-  const data = await apiFetch<AuthResponse>("/api/auth/register", {
+  const data = await rawApiFetch<AuthResponse>("/api/auth/register", {
     method: "POST",
     body: JSON.stringify({ username, password }),
   });
@@ -42,7 +42,7 @@ export async function logout(): Promise<void> {
   const token = localStorage.getItem("fdown_token");
   if (token) {
     try {
-      await apiFetch("/api/auth/logout", { method: "POST" });
+      await authenticatedApiFetch("/api/auth/logout", { method: "POST" });
     } catch {
       // ignore
     }
@@ -54,7 +54,7 @@ export async function checkAuth(): Promise<boolean> {
   const token = localStorage.getItem("fdown_token");
   if (!token) return false;
   try {
-    await apiFetch<SessionList>("/api/auth/sessions");
+    await authenticatedApiFetch<SessionList>("/api/auth/sessions");
     return true;
   } catch {
     localStorage.removeItem("fdown_token");
