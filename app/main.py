@@ -6,10 +6,15 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from flask import Flask, request, jsonify, send_file, send_from_directory
 
 from app import config
+from app.database import init_db, close_db
 from app.downloader import fetch_info, download_video
 
 app = Flask(__name__)
 PUBLIC_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "public")
+
+init_db(config.DATABASE_PATH)
+import atexit
+atexit.register(close_db)
 
 
 @app.route("/api/fetch", methods=["POST"])
