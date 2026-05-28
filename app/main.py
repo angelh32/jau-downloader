@@ -13,7 +13,7 @@ from app.downloader import fetch_info, download_video
 from app.auth import register_user, authenticate, destroy_session, login_required
 
 app = Flask(__name__)
-PUBLIC_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "public")
+FRONTEND_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend", "dist")
 
 init_db(config.DATABASE_PATH)
 import atexit
@@ -108,12 +108,12 @@ def api_auth_sessions():
 
 @app.route("/")
 def index():
-    return send_from_directory(PUBLIC_DIR, "index.html")
+    return send_from_directory(FRONTEND_DIR, "index.html")
 
 
 @app.route("/<path:path>")
 def static_files(path):
-    return send_from_directory(PUBLIC_DIR, path)
+    return send_from_directory(FRONTEND_DIR, path)
 
 
 if __name__ == "__main__":
