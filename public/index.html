@@ -11,43 +11,86 @@
     <h1>Local video Downloader</h1>
     <p class="subtitle">Download public videos from YouTube, Facebook, Twitter, and more</p>
 
-    <div class="input-group">
-      <input type="url" id="url-input" placeholder="Paste video URL here..." autofocus>
-      <button id="clipboard-btn" onclick="getClipboard()">
-        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 24 24">
-          <g fill="currentColor">
-            <path
-              d="M10 4a1 1 0 0 0 0 2h4a1 1 0 1 0 0-2h-4zM7.17 4A3.001 3.001 0 0 1 10 2h4c1.306 0 2.418.835 2.83 2H18a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1.17zm0 2H6a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1h-1.17A3.001 3.001 0 0 1 14 8h-4a3.001 3.001 0 0 1-2.83-2zM7 11a1 1 0 0 1 1-1h8a1 1 0 1 1 0 2H8a1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2H8a1 1 0 0 1-1-1z">
-            </path>
-          </g>
-        </svg>
-      </button>
-      <button id="fetch-btn" onclick="fetchVideo()">Fetch</button>
+    <nav id="nav">
+      <button class="nav-btn active" data-screen="downloader">Download</button>
+      <button class="nav-btn" data-screen="settings">Settings</button>
+      <button class="nav-btn" data-screen="credentials">Credentials</button>
+      <button class="nav-btn auth-btn" id="auth-toggle-btn">Login</button>
+    </nav>
+
+    <div id="screen-downloader" class="screen">
+      <div class="input-group">
+        <input type="url" id="url-input" placeholder="Paste video URL here..." autofocus>
+        <button id="clipboard-btn" onclick="getClipboard()">
+          <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 24 24">
+            <g fill="currentColor">
+              <path
+                d="M10 4a1 1 0 0 0 0 2h4a1 1 0 1 0 0-2h-4zM7.17 4A3.001 3.001 0 0 1 10 2h4c1.306 0 2.418.835 2.83 2H18a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1.17zm0 2H6a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1h-1.17A3.001 3.001 0 0 1 14 8h-4a3.001 3.001 0 0 1-2.83-2zM7 11a1 1 0 0 1 1-1h8a1 1 0 1 1 0 2H8a1 1 0 0 1-1-1zm0 4a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2H8a1 1 0 0 1-1-1z">
+              </path>
+            </g>
+          </svg>
+        </button>
+        <button id="fetch-btn" onclick="fetchVideo()">Fetch</button>
+      </div>
+
+      <div id="error" class="error hidden"></div>
+
+      <div id="result" class="hidden">
+        <div class="video-info">
+          <img id="thumbnail" src="" alt="Thumbnail">
+          <h2 id="title"></h2>
+        </div>
+        <div class="download-group">
+          <select id="format-select"></select>
+          <button id="download-btn" onclick="downloadVideo()">Download</button>
+        </div>
+        <label class="checkbox-label">
+          <input type="checkbox" id="save-device" checked>
+          Save video to device
+        </label>
+      </div>
+
+      <div id="loading" class="loading hidden">
+        <span class="spinner"></span>
+        <span id="loading-text">Processing...</span>
+      </div>
     </div>
 
-    <div id="error" class="error hidden"></div>
-
-    <div id="result" class="hidden">
-      <div class="video-info">
-        <img id="thumbnail" src="" alt="Thumbnail">
-        <h2 id="title"></h2>
-      </div>
-      <div class="download-group">
-        <select id="format-select"></select>
-        <button id="download-btn" onclick="downloadVideo()">Download</button>
-      </div>
-      <label class="checkbox-label">
-        <input type="checkbox" id="save-device" checked>
-        Save video to device
-      </label>
+    <div id="screen-settings" class="screen hidden">
+      <h2>Settings</h2>
+      <p class="subtitle">Coming soon</p>
     </div>
 
-    <div id="loading" class="loading hidden">
-      <span class="spinner"></span>
-      <span id="loading-text">Processing...</span>
+    <div id="screen-credentials" class="screen hidden">
+      <h2>Credentials</h2>
+      <p class="subtitle">Coming soon</p>
     </div>
   </div>
 
+  <div id="auth-overlay" class="auth-overlay hidden">
+    <div class="auth-modal">
+      <h2>Welcome</h2>
+      <p class="subtitle">Sign in or create an account</p>
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">Login</button>
+        <button class="auth-tab" data-tab="register">Register</button>
+      </div>
+      <div id="auth-error" class="error hidden"></div>
+      <form id="auth-login-form">
+        <input type="text" id="login-username" placeholder="Username" required>
+        <input type="password" id="login-password" placeholder="Password" required>
+        <button type="submit">Login</button>
+      </form>
+      <form id="auth-register-form" class="hidden">
+        <input type="text" id="reg-username" placeholder="Username" required>
+        <input type="password" id="reg-password" placeholder="Password" required>
+        <input type="password" id="reg-confirm" placeholder="Confirm password" required>
+        <button type="submit">Register</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/auth.js"></script>
   <script src="/app.js"></script>
 </body>
 </html>
