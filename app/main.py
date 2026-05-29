@@ -8,13 +8,21 @@ from flask import Flask, request, jsonify, send_file, send_from_directory, g
 
 from app import config
 from app.database import init_db, close_db
-from app.database.models import Session, Cookie
+from app.database.models import Session, Cookie, User
 from app.downloader import fetch_info, download_video
-from app.auth import register_user, authenticate, destroy_session, login_required
+from app.auth import register_user, authenticate, destroy_session, login_required, validate_session
 from app.cookies import encrypt_cookie
 
 app = Flask(__name__)
 FRONTEND_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend", "dist")
+
+
+def _get_optional_user() -> User | None:
+    auth = request.headers.get("Authorization", "")
+    if not auth.startswith("Bearer "):
+        return None
+    token = auth.removeprefix("Bearer ").strip()
+    return validate_session(token)
 
 init_db(config.DATABASE_PATH)
 import atexit
@@ -28,7 +36,8 @@ def api_fetch():
         return jsonify({"error": "Missing url"}), 400
 
     try:
-        info = fetch_info(data["url"])
+        user = _get_optional_user()
+        info = fetch_info(data["url"], user=user)
         return jsonify(info)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -44,7 +53,8 @@ def api_download():
         return jsonify({"error": "Missing url or format_id"}), 400
 
     try:
-        filepath = download_video(url, format_id)
+        user = _get_optional_user()
+        filepath = download_video(url, format_id, user=user)
         if not save_to_device:
             return jsonify({"success": True, "file": os.path.basename(filepath)})
         return send_file(
