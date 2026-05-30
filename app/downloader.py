@@ -42,6 +42,7 @@ def fetch_info(url: str, user: User | None = None) -> dict:
         "quiet": True,
         "no_warnings": True,
         "skip_download": True,
+        "restrictfilenames": True,
     }
 
     cookie_path = None
@@ -86,6 +87,7 @@ def download_video(url: str, format_id: str, user: User | None = None) -> str:
         "outtmpl": outtmpl,
         "quiet": True,
         "no_warnings": True,
+        "restrictfilenames": True,
         "max_filesize": config.MAX_FILESIZE_MB * 1024 * 1024,
     }
 
