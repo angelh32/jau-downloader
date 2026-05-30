@@ -8,12 +8,21 @@ from flask import Flask, request, jsonify, send_file, send_from_directory, g
 
 from app import config
 from app.database import init_db, close_db
-from app.database.models import Session
+from app.database.models import Session, Cookie, User
 from app.downloader import fetch_info, download_video
-from app.auth import register_user, authenticate, destroy_session, login_required
+from app.auth import register_user, authenticate, destroy_session, login_required, validate_session
+from app.cookies import encrypt_cookie
 
 app = Flask(__name__)
 FRONTEND_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend", "dist")
+
+
+def _get_optional_user() -> User | None:
+    auth = request.headers.get("Authorization", "")
+    if not auth.startswith("Bearer "):
+        return None
+    token = auth.removeprefix("Bearer ").strip()
+    return validate_session(token)
 
 init_db(config.DATABASE_PATH)
 import atexit
@@ -27,7 +36,8 @@ def api_fetch():
         return jsonify({"error": "Missing url"}), 400
 
     try:
-        info = fetch_info(data["url"])
+        user = _get_optional_user()
+        info = fetch_info(data["url"], user=user)
         return jsonify(info)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -43,7 +53,8 @@ def api_download():
         return jsonify({"error": "Missing url or format_id"}), 400
 
     try:
-        filepath = download_video(url, format_id)
+        user = _get_optional_user()
+        filepath = download_video(url, format_id, user=user)
         if not save_to_device:
             return jsonify({"success": True, "file": os.path.basename(filepath)})
         return send_file(
@@ -104,6 +115,66 @@ def api_auth_sessions():
             for s in sessions
         ]
     })
+
+
+@app.route("/api/down-sessions", methods=["GET"])
+@login_required
+def api_cookies_list():
+    cookies = (
+        Cookie.select()
+        .where(Cookie.user == g.current_user)
+        .order_by(Cookie.created_at.desc())
+    )
+    return jsonify({
+        "cookies": [
+            {
+                "id": c.id,
+                "page": c.page,
+                "created_at": c.created_at.isoformat(),
+                "modified_at": c.modified_at.isoformat(),
+            }
+            for c in cookies
+        ]
+    })
+
+
+@app.route("/api/down-sessions", methods=["POST"])
+@login_required
+def api_cookies_upload():
+    data = request.get_json(silent=True)
+    if not data or not data.get("page") or not data.get("cookie_raw"):
+        return jsonify({"error": "Missing page or cookie_raw"}), 400
+
+    now = datetime.now()
+    encrypted = encrypt_cookie(data["cookie_raw"])
+    cookie = Cookie.create(
+        user=g.current_user,
+        page=data["page"],
+        cookie_coded=encrypted,
+        created_at=now,
+        modified_at=now,
+    )
+    return jsonify({
+        "id": cookie.id,
+        "page": cookie.page,
+        "created_at": cookie.created_at.isoformat(),
+        "modified_at": cookie.modified_at.isoformat(),
+    }), 201
+
+
+@app.route("/api/down-sessions/<int:cookie_id>", methods=["DELETE"])
+@login_required
+def api_cookies_delete(cookie_id):
+    try:
+        cookie = Cookie.get_by_id(cookie_id)
+    except Cookie.DoesNotExist:
+        return jsonify({"error": "Cookie not found"}), 404
+
+    if cookie.user != g.current_user:
+        return jsonify({"error": "Forbidden"}), 403
+
+    cookie.delete_instance()
+    return jsonify({"success": True})
 
 
 @app.route("/")

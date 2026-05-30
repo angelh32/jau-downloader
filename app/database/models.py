@@ -1,4 +1,4 @@
-from peewee import Model, AutoField, CharField, DateTimeField, ForeignKeyField
+from peewee import Model, AutoField, CharField, DateTimeField, ForeignKeyField, TextField
 
 from app.database import database
 
@@ -21,3 +21,12 @@ class Session(BaseModel):
     token = CharField(max_length=128, unique=True, index=True, null=False)
     created_at = DateTimeField()
     expires_at = DateTimeField()
+
+
+class Cookie(BaseModel):
+    id = AutoField()
+    user = ForeignKeyField(User, backref="cookies")
+    page = CharField(max_length=256, null=False)
+    cookie_coded = TextField(null=False)
+    created_at = DateTimeField()
+    modified_at = DateTimeField()
