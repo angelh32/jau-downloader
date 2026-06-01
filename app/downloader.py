@@ -1,4 +1,5 @@
 import os
+import re
 import tempfile
 
 import yt_dlp
@@ -8,6 +9,8 @@ from app.database.models import Cookie, User
 
 
 def check_extractor(url: str) -> str:
+    if re.search(r"facebook\.com/", url, re.I):
+        return "facebook"
     for ie in yt_dlp.extractor.gen_extractors():
         if ie.suitable(url) and ie.IE_NAME != "generic":
             return ie.IE_NAME.lower()
@@ -33,6 +36,18 @@ def _write_cookie_tempfile(cookie: str) -> str:
     f.close()
     return f.name
 
+def _format_resolution_info(formats_info: list[dict]) -> list[dict]:
+    formats = []
+    for f in formats_info:
+        regex= r".* - " if f.get("resolution") else r" - .*"
+        format_note=re.sub(regex, "", f.get("format", "unknown"))
+        formats.append({
+            "format_id": f["format_id"],
+            "resolution": f.get("resolution", "unknown"),
+            "ext": f.get("ext", "unknown"),
+            "format": format_note,
+        })
+    return formats
 
 def fetch_info(url: str, user: User | None = None) -> dict:
     page_key = check_extractor(url)
@@ -57,16 +72,7 @@ def fetch_info(url: str, user: User | None = None) -> dict:
         if cookie_path and os.path.exists(cookie_path):
             os.unlink(cookie_path)
 
-    formats = []
-    for f in info.get("formats", []):
-        if f.get("vcodec") == "none":
-            continue
-        formats.append({
-            "format_id": f["format_id"],
-            "resolution": f.get("resolution") or f.get("height", "audio") and f"{f['height']}p" or "unknown",
-            "ext": f.get("ext", "mp4"),
-            "filesize": f.get("filesize") or f.get("filesize_approx") or 0,
-        })
+    formats = _format_resolution_info(info.get("formats", []))
 
     return {
         "title": info.get("title", "Unknown"),

@@ -10,7 +10,7 @@ export interface VideoFormat {
   format_id: string;
   resolution: string;
   ext: string;
-  filesize: number;
+  format: string;
 }
 
 export async function fetchVideoInfo(
