@@ -7,6 +7,10 @@ downloads/
 data/
 .DS_Store
 data/
+.pytest_cache/
+
+# Editor config
+.vscode
 
 # Agents and planning
 planning/

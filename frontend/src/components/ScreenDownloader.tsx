@@ -158,7 +158,7 @@ export default function ScreenDownloader({
             >
               {sortedFormats().map((f) => (
                 <option key={f.format_id} value={f.format_id}>
-                  {f.resolution} ({f.ext})
+                  {f.format??f.format_id} ({f.ext})
                 </option>
               ))}
             </select>
