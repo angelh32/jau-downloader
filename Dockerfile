@@ -5,16 +5,21 @@ RUN npm ci
 COPY frontend/ .
 RUN npm run build
 
-FROM python:3.12-slim
+FROM python:3.12-alpine
+
+ENV PYTHONUNBUFFERED=1
+ENV DOWNLOAD_PATH=/downloads
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache ffmpeg
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN apk add --no-cache --virtual .build-deps gcc musl-dev python3-dev libffi-dev openssl-dev \
+    && pip install --no-cache-dir -r requirements.txt \
+    && apk del .build-deps
 
-COPY . .
+COPY app/ ./app/
 COPY --from=frontend-builder /frontend/dist /app/frontend/dist
 
 RUN mkdir -p /downloads
