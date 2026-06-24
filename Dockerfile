@@ -1,9 +1,12 @@
 FROM node:22-slim AS frontend-builder
+
+RUN npm install -g pnpm
+
 WORKDIR /frontend
-COPY frontend/package.json frontend/package-lock.json ./
-RUN npm ci
+COPY frontend/package.json frontend/pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 COPY frontend/ .
-RUN npm run build
+RUN pnpm build
 
 FROM python:3.12-alpine
 
