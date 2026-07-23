@@ -1,0 +1,76 @@
+{
+  "app": {
+    "title": "JAU Downloader",
+    "subtitle": "Descarga videos públicos de YouTube, Facebook, Twitter y más"
+  },
+  "nav": {
+    "download": "Descargar",
+    "settings": "Ajustes",
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión"
+  },
+  "auth": {
+    "welcome": "Bienvenido",
+    "subtitle": "Inicia sesión o crea una cuenta",
+    "login_tab": "Iniciar sesión",
+    "register_tab": "Registrarse",
+    "username_placeholder": "Usuario",
+    "password_placeholder": "Contraseña",
+    "confirm_placeholder": "Confirmar contraseña",
+    "login_button": "Iniciar sesión",
+    "register_button": "Registrarse",
+    "login_failed": "Error al iniciar sesión",
+    "passwords_mismatch": "Las contraseñas no coinciden",
+    "registration_failed": "Error al registrarse"
+  },
+  "downloader": {
+    "fetching": "Obteniendo información del video...",
+    "downloading": "Descargando...",
+    "download_started": "Descarga iniciada",
+    "saved_to_server": "Video guardado en la carpeta del servidor",
+    "clipboard_failed": "Error al leer el portapapeles",
+    "url_placeholder": "Pega la URL del video aquí...",
+    "fetch_button": "Obtener",
+    "thumbnail_alt": "Miniatura",
+    "download_button": "Descargar",
+    "save_to_device": "Guardar video en el dispositivo",
+    "fetch_failed": "Error al obtener información",
+    "download_failed": "Error al descargar"
+  },
+  "credentials": {
+    "title": "Sesiones guardadas",
+    "subtitle": "Sesiones guardadas para sitios que requieren autenticación",
+    "loading": "Cargando sesiones...",
+    "empty": "No hay sesiones guardadas",
+    "delete_title": "Eliminar sesión",
+    "delete_button": "Eliminar",
+    "add_button": "+ Añadir sesión",
+    "modal_title": "Añadir sesión",
+    "modal_subtitle": "Pega los datos de sesión de un sitio",
+    "select_site": "Seleccionar sitio...",
+    "site_facebook": "facebook",
+    "site_youtube": "youtube",
+    "site_twitter": "twitter",
+    "site_instagram": "instagram",
+    "site_tiktok": "tiktok",
+    "textarea_placeholder": "Pega los datos de sesión aquí...",
+    "saving": "Guardando...",
+    "save_session": "Guardar sesión",
+    "load_failed": "Error al cargar",
+    "saved_success": "Sesión guardada",
+    "upload_failed": "Error al subir",
+    "deleted_success": "Sesión eliminada",
+    "delete_failed": "Error al eliminar"
+  },
+  "settings": {
+    "title": "Ajustes"
+  },
+  "language": {
+    "label": "Idioma"
+  },
+  "theme": {
+    "label": "Tema",
+    "dark": "Oscuro",
+    "light": "Claro"
+  }
+}

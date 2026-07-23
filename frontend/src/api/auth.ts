@@ -22,7 +22,7 @@ export async function login(
     method: "POST",
     body: JSON.stringify({ username, password }),
   });
-  localStorage.setItem("fdown_token", data.token);
+  localStorage.setItem("jaudownloader_token", data.token);
   return data;
 }
 
@@ -34,12 +34,12 @@ export async function register(
     method: "POST",
     body: JSON.stringify({ username, password }),
   });
-  localStorage.setItem("fdown_token", data.token);
+  localStorage.setItem("jaudownloader_token", data.token);
   return data;
 }
 
 export async function logout(): Promise<void> {
-  const token = localStorage.getItem("fdown_token");
+  const token = localStorage.getItem("jaudownloader_token");
   if (token) {
     try {
       await authenticatedApiFetch("/api/auth/logout", { method: "POST" });
@@ -47,17 +47,17 @@ export async function logout(): Promise<void> {
       // ignore
     }
   }
-  localStorage.removeItem("fdown_token");
+  localStorage.removeItem("jaudownloader_token");
 }
 
 export async function checkAuth(): Promise<boolean> {
-  const token = localStorage.getItem("fdown_token");
+  const token = localStorage.getItem("jaudownloader_token");
   if (!token) return false;
   try {
     await authenticatedApiFetch<SessionList>("/api/auth/sessions");
     return true;
   } catch {
-    localStorage.removeItem("fdown_token");
+    localStorage.removeItem("jaudownloader_token");
     return false;
   }
 }
