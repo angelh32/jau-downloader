@@ -27,7 +27,7 @@ export async function authenticatedApiFetch<T = unknown>(
   path: string,
   options: RequestInit = {}
 ): Promise<T> {
-  const token = localStorage.getItem("fdown_token");
+  const token = localStorage.getItem("jaudownloader_token");
   const headers: Record<string, string> = {
     ...(options.headers as Record<string, string>),
   };
@@ -39,7 +39,7 @@ export async function authenticatedApiFetch<T = unknown>(
   }
   const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
   if (res.status === 401) {
-    localStorage.removeItem("fdown_token");
+    localStorage.removeItem("jaudownloader_token");
     throw new AuthError("Authentication required");
   }
   if (!res.ok) {

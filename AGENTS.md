@@ -1,4 +1,4 @@
-# LocalVidDown — AI Context
+# JAU Downloader — AI Context
 
 ## Overview
 Self-hosted video downloader. Paste URL → fetch formats → download. SQLite + Peewee ORM, Bearer token auth.
@@ -24,8 +24,9 @@ app/
 frontend/
   src/
     api/         # API client layer (client.ts, auth.ts, downloader.ts)
-    components/  # React components (NavBar, AuthOverlay, screen components)
+    components/  # React components (NavBar, AuthOverlay, OverlayWindow, screen components)
     context/     # AuthContext (token state, login/logout/register)
+    theme.ts     # Light/dark theme toggle, localStorage persistence
     App.tsx      # Root component with screen routing
     main.tsx     # Entry point
   index.html     # Vite entry HTML
@@ -41,7 +42,10 @@ docker-compose.yml  # Port 3000, volume ./downloads, .env
 - `download_video()` saves to `DOWNLOAD_PATH`, returns filepath. Handles extension mismatch via filename fallback search.
 - Gunicorn run via `__main__` block (direct `python app/main.py`). Workers/threads tuned in there.
 - Static files served from `frontend/dist/` (or `public/` fallback) via `send_from_directory`.
-- Auth via Bearer token: `Authorization: Bearer <token>` header. Token stored in localStorage (`fdown_token`).
+- Auth via Bearer token: `Authorization: Bearer <token>` header. Token stored in localStorage (`jaudownloader_token`).
+- Theme system: CSS custom properties on `:root` (dark) and `[data-theme="light"]`. Persisted in localStorage (`jaudownloader_theme`). Toggle only in Settings.
+- `OverlayWindow` shared modal: fixed backdrop, Escape key close, configurable `maxWidth`. Used by AuthOverlay and the credentials form in ScreenSettings.
+- Sidebar (`NavBar`) at `min-height: 100vh` with logout as full-width nav-item (error colors) at top of user card, login as nav-item when unauthenticated.
 - Database auto-created on app start at `DATABASE_PATH` (default `data/app.db`).
 - `.env` not committed. `downloads/` not committed. `data/` not committed.
 
@@ -60,11 +64,11 @@ docker-compose.yml  # Port 3000, volume ./downloads, .env
 docker compose up -d --build
 
 # Multi-arch (build amd64 from ARM Mac)
-docker buildx build --platform linux/amd64 -t localviddown:latest --load .
-docker save localviddown:latest | gzip > localviddown.tar.gz
+docker buildx build --platform linux/amd64 -t jaudownloader:latest --load .
+docker save jaudownloader:latest | gzip > jaudownloader.tar.gz
 
 # On target x86 machine:
-gunzip -c localviddown.tar.gz | docker load
+gunzip -c jaudownloader.tar.gz | docker load
 docker compose up -d
 ```
 

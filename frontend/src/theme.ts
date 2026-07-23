@@ -1,4 +1,4 @@
-const STORAGE_KEY = "fdown_theme";
+const STORAGE_KEY = "jaudownloader_theme";
 
 export function getStoredTheme(): "dark" | "light" {
   if (typeof window === "undefined") return "dark";

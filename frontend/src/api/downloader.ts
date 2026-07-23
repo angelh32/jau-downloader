@@ -32,14 +32,14 @@ export async function downloadVideo(
     format_id: formatId,
     save_to_device: String(saveToDevice),
   });
-  const token = localStorage.getItem("fdown_token");
+  const token = localStorage.getItem("jaudownloader_token");
   const headers: Record<string, string> = {};
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
   }
   const res = await fetch(`/api/download?${params}`, { headers });
   if (res.status === 401) {
-    localStorage.removeItem("fdown_token");
+    localStorage.removeItem("jaudownloader_token");
     throw new Error("Authentication required");
   }
   if (!res.ok) {

@@ -23,14 +23,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState<string | null>(
-    localStorage.getItem("fdown_user")
+    localStorage.getItem("jaudownloader_user")
   );
 
   useEffect(() => {
     checkAuth()
       .then((ok) => {
         if (!ok) {
-          localStorage.removeItem("fdown_user");
+          localStorage.removeItem("jaudownloader_user");
           setUsername(null);
         }
         setIsAuthenticated(ok);
@@ -42,7 +42,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const data = await login(username, password);
     setIsAuthenticated(true);
     setUsername(data.username ?? username);
-    localStorage.setItem("fdown_user", data.username ?? username);
+    localStorage.setItem("jaudownloader_user", data.username ?? username);
     return data;
   }, []);
 
@@ -51,7 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const data = await register(username, password);
       setIsAuthenticated(true);
       setUsername(data.username ?? username);
-      localStorage.setItem("fdown_user", data.username ?? username);
+      localStorage.setItem("jaudownloader_user", data.username ?? username);
       return data;
     },
     []
@@ -61,7 +61,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await logout();
     setIsAuthenticated(false);
     setUsername(null);
-    localStorage.removeItem("fdown_user");
+    localStorage.removeItem("jaudownloader_user");
   }, []);
 
   return (
