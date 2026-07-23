@@ -1,0 +1,73 @@
+{
+  "app": {
+    "title": "Local video Downloader",
+    "subtitle": "Download public videos from YouTube, Facebook, Twitter, and more"
+  },
+  "nav": {
+    "download": "Download",
+    "settings": "Settings",
+    "credentials": "Credentials",
+    "login": "Login",
+    "logout": "Logout"
+  },
+  "auth": {
+    "welcome": "Welcome",
+    "subtitle": "Sign in or create an account",
+    "login_tab": "Login",
+    "register_tab": "Register",
+    "username_placeholder": "Username",
+    "password_placeholder": "Password",
+    "confirm_placeholder": "Confirm password",
+    "login_button": "Login",
+    "register_button": "Register",
+    "login_failed": "Login failed",
+    "passwords_mismatch": "Passwords do not match",
+    "registration_failed": "Registration failed"
+  },
+  "downloader": {
+    "fetching": "Fetching video info...",
+    "downloading": "Downloading...",
+    "download_started": "Download started",
+    "saved_to_server": "Video saved to server folder",
+    "clipboard_failed": "Failed to read clipboard",
+    "url_placeholder": "Paste video URL here...",
+    "fetch_button": "Fetch",
+    "thumbnail_alt": "Thumbnail",
+    "download_button": "Download",
+    "save_to_device": "Save video to device",
+    "fetch_failed": "Failed to fetch",
+    "download_failed": "Download failed"
+  },
+  "credentials": {
+    "title": "Stored Sessions",
+    "subtitle": "Saved login sessions for sites that require authentication",
+    "loading": "Loading sessions...",
+    "empty": "No sessions saved yet",
+    "delete_title": "Delete session",
+    "delete_button": "Delete",
+    "add_button": "+ Add Session",
+    "modal_title": "Add Session",
+    "modal_subtitle": "Paste session data for a site",
+    "select_site": "Select site...",
+    "site_facebook": "facebook",
+    "site_youtube": "youtube",
+    "site_twitter": "twitter",
+    "site_instagram": "instagram",
+    "site_tiktok": "tiktok",
+    "textarea_placeholder": "Paste session data here...",
+    "saving": "Saving...",
+    "save_session": "Save Session",
+    "load_failed": "Failed to load",
+    "saved_success": "Session saved",
+    "upload_failed": "Upload failed",
+    "deleted_success": "Session deleted",
+    "delete_failed": "Delete failed"
+  },
+  "settings": {
+    "title": "Settings",
+    "coming_soon": "Coming soon"
+  },
+  "language": {
+    "label": "Language"
+  }
+}

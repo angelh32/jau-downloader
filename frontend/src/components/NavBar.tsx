@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
 import "./NavBar.css";
 
@@ -7,12 +8,13 @@ interface NavBarProps {
 }
 
 export default function NavBar({ activeScreen, onNavigate }: NavBarProps) {
+  const { t } = useTranslation();
   const { isAuthenticated, logoutUser } = useAuth();
 
   const tabs = [
-    { id: "downloader", label: "Download" },
-    { id: "settings", label: "Settings" },
-    { id: "credentials", label: "Credentials" },
+    { id: "downloader", label: t("nav.download") },
+    { id: "settings", label: t("nav.settings") },
+    { id: "credentials", label: t("nav.credentials") },
   ];
 
   return (
@@ -30,7 +32,7 @@ export default function NavBar({ activeScreen, onNavigate }: NavBarProps) {
         className="nav-btn auth-btn"
         onClick={isAuthenticated ? logoutUser : () => onNavigate("login")}
       >
-        {isAuthenticated ? "Logout" : "Login"}
+        {isAuthenticated ? t("nav.logout") : t("nav.login")}
       </button>
     </nav>
   );

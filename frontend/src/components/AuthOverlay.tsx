@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
 import "./AuthOverlay.css";
 
@@ -7,6 +8,7 @@ interface AuthOverlayProps {
 }
 
 export default function AuthOverlay({ onClose }: AuthOverlayProps) {
+  const { t } = useTranslation();
   const { loginUser, registerUser } = useAuth();
   const [tab, setTab] = useState<"login" | "register">("login");
   const [error, setError] = useState("");
@@ -21,7 +23,7 @@ export default function AuthOverlay({ onClose }: AuthOverlayProps) {
       await loginUser(username, password);
       onClose();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Login failed");
+      setError(err instanceof Error ? err.message : t("auth.login_failed"));
     }
   }
 
@@ -33,64 +35,64 @@ export default function AuthOverlay({ onClose }: AuthOverlayProps) {
     const password = form.get("password") as string;
     const confirm = form.get("confirm") as string;
     if (password !== confirm) {
-      setError("Passwords do not match");
+      setError(t("auth.passwords_mismatch"));
       return;
     }
     try {
       await registerUser(username, password);
       onClose();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Registration failed");
+      setError(err instanceof Error ? err.message : t("auth.registration_failed"));
     }
   }
 
   return (
     <div className="auth-overlay" onClick={onClose}>
       <div className="auth-modal" onClick={(e) => e.stopPropagation()}>
-        <h2>Welcome</h2>
-        <p className="subtitle">Sign in or create an account</p>
+        <h2>{t("auth.welcome")}</h2>
+        <p className="subtitle">{t("auth.subtitle")}</p>
         <div className="auth-tabs">
           <button
             className={`auth-tab ${tab === "login" ? "active" : ""}`}
             onClick={() => setTab("login")}
           >
-            Login
+            {t("auth.login_tab")}
           </button>
           <button
             className={`auth-tab ${tab === "register" ? "active" : ""}`}
             onClick={() => setTab("register")}
           >
-            Register
+            {t("auth.register_tab")}
           </button>
         </div>
         {error && <div className="error">{error}</div>}
         {tab === "login" ? (
           <form onSubmit={handleLogin}>
-            <input name="username" placeholder="Username" required />
+            <input name="username" placeholder={t("auth.username_placeholder")} required />
             <input
               name="password"
               type="password"
-              placeholder="Password"
+              placeholder={t("auth.password_placeholder")}
               required
             />
-            <button type="submit">Login</button>
+            <button type="submit">{t("auth.login_button")}</button>
           </form>
         ) : (
           <form onSubmit={handleRegister}>
-            <input name="username" placeholder="Username" required />
+            <input name="username" placeholder={t("auth.username_placeholder")} required />
             <input
               name="password"
               type="password"
-              placeholder="Password"
+              placeholder={t("auth.password_placeholder")}
               required
             />
             <input
               name="confirm"
               type="password"
-              placeholder="Confirm password"
+              placeholder={t("auth.confirm_placeholder")}
               required
             />
-            <button type="submit">Register</button>
+            <button type="submit">{t("auth.register_button")}</button>
           </form>
         )}
       </div>

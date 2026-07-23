@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   fetchVideoInfo,
   downloadVideo,
@@ -15,6 +16,7 @@ interface ScreenDownloaderProps {
 export default function ScreenDownloader({
   onAuthRequired,
 }: ScreenDownloaderProps) {
+  const { t } = useTranslation();
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState("");
@@ -30,7 +32,7 @@ export default function ScreenDownloader({
     setSuccess("");
     setInfo(null);
     setLoading(true);
-    setLoadingText("Fetching video info...");
+    setLoadingText(t("downloader.fetching"));
     try {
       const data = await fetchVideoInfo(url.trim());
       setInfo(data);
@@ -41,7 +43,7 @@ export default function ScreenDownloader({
       if (err instanceof AuthError) {
         onAuthRequired();
       } else {
-        setError(err instanceof Error ? err.message : "Failed to fetch");
+        setError(err instanceof Error ? err.message : t("downloader.fetch_failed"));
       }
     } finally {
       setLoading(false);
@@ -53,7 +55,7 @@ export default function ScreenDownloader({
     setError("");
     setSuccess("");
     setLoading(true);
-    setLoadingText("Downloading...");
+    setLoadingText(t("downloader.downloading"));
     try {
       const res = await downloadVideo(url.trim(), formatId, saveToDevice);
       if (saveToDevice) {
@@ -66,15 +68,15 @@ export default function ScreenDownloader({
         a.download = filename;
         a.click();
         URL.revokeObjectURL(a.href);
-        setSuccess("Download started");
+        setSuccess(t("downloader.download_started"));
       } else {
-        setSuccess("Video saved to server folder");
+        setSuccess(t("downloader.saved_to_server"));
       }
     } catch (err) {
       if (err instanceof AuthError) {
         onAuthRequired();
       } else {
-        setError(err instanceof Error ? err.message : "Download failed");
+        setError(err instanceof Error ? err.message : t("downloader.download_failed"));
       }
     } finally {
       setLoading(false);
@@ -85,7 +87,6 @@ export default function ScreenDownloader({
     try {
       const text = await navigator.clipboard.readText();
       setUrl(text);
-      // auto-fetch after short delay
       setTimeout(() => {
         const input = document.querySelector<HTMLInputElement>("#url-input");
         if (input) {
@@ -94,7 +95,7 @@ export default function ScreenDownloader({
         }
       }, 100);
     } catch (err) {
-      setError("Failed to read clipboard");
+      setError(t("downloader.clipboard_failed"));
     }
   }
 
@@ -113,7 +114,7 @@ export default function ScreenDownloader({
         <input
           id="url-input"
           type="url"
-          placeholder="Paste video URL here..."
+          placeholder={t("downloader.url_placeholder")}
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleFetch()}
@@ -131,7 +132,7 @@ export default function ScreenDownloader({
           </svg>
         </button>
         <button id="fetch-btn" onClick={handleFetch} disabled={loading}>
-          Fetch
+          {t("downloader.fetch_button")}
         </button>
       </div>
 
@@ -148,7 +149,7 @@ export default function ScreenDownloader({
       {info && !loading && (
         <div className="result">
           <div className="video-info">
-            <img src={info.thumbnail} alt="Thumbnail" />
+            <img src={info.thumbnail} alt={t("downloader.thumbnail_alt")} />
             <h2>{info.title}</h2>
           </div>
           <div className="download-group">
@@ -167,7 +168,7 @@ export default function ScreenDownloader({
               onClick={handleDownload}
               disabled={loading}
             >
-              Download
+              {t("downloader.download_button")}
             </button>
           </div>
           <label className="checkbox-label">
@@ -176,7 +177,7 @@ export default function ScreenDownloader({
               checked={saveToDevice}
               onChange={(e) => setSaveToDevice(e.target.checked)}
             />
-            Save video to device
+            {t("downloader.save_to_device")}
           </label>
         </div>
       )}

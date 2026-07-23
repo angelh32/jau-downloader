@@ -36,6 +36,27 @@ button {
   font-family: inherit;
 }
 
+.setting-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.setting-row label {
+  font-size: 0.95rem;
+  color: #ccc;
+}
+
+.setting-row select {
+  background: #1a1a1a;
+  color: #e0e0e0;
+  border: 1px solid #333;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
 @media (max-width: 480px) {
   .container {
     padding: 1rem;

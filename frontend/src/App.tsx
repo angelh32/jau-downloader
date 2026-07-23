@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import NavBar from "./components/NavBar";
 import AuthOverlay from "./components/AuthOverlay";
@@ -7,6 +8,7 @@ import ScreenSettings from "./components/ScreenSettings";
 import ScreenCredentials from "./components/ScreenCredentials";
 
 function AppContent() {
+  const { t } = useTranslation();
   const { loading } = useAuth();
   const [screen, setScreen] = useState("downloader");
   const [showAuth, setShowAuth] = useState(false);
@@ -23,10 +25,8 @@ function AppContent() {
 
   return (
     <>
-      <h1>Local video Downloader</h1>
-      <p className="subtitle">
-        Download public videos from YouTube, Facebook, Twitter, and more
-      </p>
+      <h1>{t("app.title")}</h1>
+      <p className="subtitle">{t("app.subtitle")}</p>
 
       <NavBar activeScreen={screen} onNavigate={handleNavigate} />
 

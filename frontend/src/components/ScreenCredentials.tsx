@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
 import {
   fetchDownSessions,
@@ -9,6 +10,7 @@ import {
 import "./ScreenCredentials.css";
 
 export default function ScreenCredentials() {
+  const { t } = useTranslation();
   const { isAuthenticated } = useAuth();
   const [sessions, setSessions] = useState<DownSession[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,11 +28,11 @@ export default function ScreenCredentials() {
       const data = await fetchDownSessions();
       setSessions(data.cookies);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load");
+      setError(err instanceof Error ? err.message : t("credentials.load_failed"));
     } finally {
       setLoading(false);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, t]);
 
   useEffect(() => {
     load();
@@ -46,10 +48,10 @@ export default function ScreenCredentials() {
       setPage("");
       setCookieRaw("");
       setShowForm(false);
-      setSuccess("Session saved");
+      setSuccess(t("credentials.saved_success"));
       await load();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Upload failed");
+      setError(err instanceof Error ? err.message : t("credentials.upload_failed"));
     } finally {
       setUploading(false);
     }
@@ -61,9 +63,9 @@ export default function ScreenCredentials() {
     try {
       await deleteDownSession(id);
       setSessions((prev) => prev.filter((s) => s.id !== id));
-      setSuccess("Session deleted");
+      setSuccess(t("credentials.deleted_success"));
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Delete failed");
+      setError(err instanceof Error ? err.message : t("credentials.delete_failed"));
     }
   }
 
@@ -76,10 +78,8 @@ export default function ScreenCredentials() {
 
   return (
     <div>
-      <h2>Stored Sessions</h2>
-      <p className="subtitle">
-        Saved login sessions for sites that require authentication
-      </p>
+      <h2>{t("credentials.title")}</h2>
+      <p className="subtitle">{t("credentials.subtitle")}</p>
 
       {error && <div className="msg error">{error}</div>}
       {success && <div className="msg success">{success}</div>}
@@ -87,10 +87,10 @@ export default function ScreenCredentials() {
       {loading ? (
         <div className="loading">
           <span className="spinner" />
-          <span>Loading sessions...</span>
+          <span>{t("credentials.loading")}</span>
         </div>
       ) : sessions.length === 0 ? (
-        <p className="empty">No sessions saved yet</p>
+        <p className="empty">{t("credentials.empty")}</p>
       ) : (
         <ul className="session-list">
           {sessions.map((s) => (
@@ -100,9 +100,9 @@ export default function ScreenCredentials() {
               <button
                 className="btn-delete"
                 onClick={() => handleDelete(s.id)}
-                title="Delete session"
+                title={t("credentials.delete_title")}
               >
-                Delete
+                {t("credentials.delete_button")}
               </button>
             </li>
           ))}
@@ -110,29 +110,29 @@ export default function ScreenCredentials() {
       )}
 
       <button className="btn-add" onClick={() => setShowForm(true)}>
-        + Add Session
+        {t("credentials.add_button")}
       </button>
 
       {showForm && (
         <div className="session-overlay" onClick={() => setShowForm(false)}>
           <div className="session-modal" onClick={(e) => e.stopPropagation()}>
-            <h3>Add Session</h3>
-            <p className="subtitle">Paste session data for a site</p>
+            <h3>{t("credentials.modal_title")}</h3>
+            <p className="subtitle">{t("credentials.modal_subtitle")}</p>
             <select
               className="input"
               value={page}
               onChange={(e) => setPage(e.target.value)}
             >
-              <option value="">Select site...</option>
-              <option value="facebook">facebook</option>
-              <option value="youtube">youtube</option>
-              <option value="twitter">twitter</option>
-              <option value="instagram">instagram</option>
-              <option value="tiktok">tiktok</option>
+              <option value="">{t("credentials.select_site")}</option>
+              <option value="facebook">{t("credentials.site_facebook")}</option>
+              <option value="youtube">{t("credentials.site_youtube")}</option>
+              <option value="twitter">{t("credentials.site_twitter")}</option>
+              <option value="instagram">{t("credentials.site_instagram")}</option>
+              <option value="tiktok">{t("credentials.site_tiktok")}</option>
             </select>
             <textarea
               className="input textarea"
-              placeholder="Paste session data here..."
+              placeholder={t("credentials.textarea_placeholder")}
               value={cookieRaw}
               onChange={(e) => setCookieRaw(e.target.value)}
               rows={3}
@@ -143,7 +143,7 @@ export default function ScreenCredentials() {
               onClick={handleUpload}
               disabled={uploading || !page.trim() || !cookieRaw.trim()}
             >
-              {uploading ? "Saving..." : "Save Session"}
+              {uploading ? t("credentials.saving") : t("credentials.save_session")}
             </button>
           </div>
         </div>

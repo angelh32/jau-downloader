@@ -1,7 +1,7 @@
 # LocalVidDown — AI Context
 
 ## Overview
-Self-hosted video downloader. Paste URL → fetch formats → download. Stateless, no DB, no auth.
+Self-hosted video downloader. Paste URL → fetch formats → download. SQLite + Peewee ORM, Bearer token auth.
 
 ## Tech Stack
 - **Backend:** Python 3.12 + Flask + gunicorn
@@ -17,6 +17,7 @@ app/
   downloader.py  # yt-dlp wrapper: fetch_info(), download_video()
   config.py      # Env vars: DOWNLOAD_PATH, MAX_FILESIZE_MB, DATABASE_PATH
   auth.py        # register, login, logout, session validation, login_required decorator
+  cookies.py     # encrypt/decrypt cookie jars for yt-dlp
   database/
     __init__.py  # Peewee SqliteDatabase singleton, init/close helpers
     models.py    # User, Session models
@@ -29,7 +30,7 @@ frontend/
     main.tsx     # Entry point
   index.html     # Vite entry HTML
   vite.config.ts # Dev proxy /api -> localhost:3000
-Dockerfile       # Multi-stage: Node build frontend, python:3.12-slim + ffmpeg
+Dockerfile       # Multi-stage: pnpm build frontend (Node), python:3.12-alpine + ffmpeg
 docker-compose.yml  # Port 3000, volume ./downloads, .env
 .dockerignore    # Excludes .env, venv, downloads, frontend src/node_modules from build
 ```
@@ -49,6 +50,8 @@ docker-compose.yml  # Port 3000, volume ./downloads, .env
 |---|---|---|
 | `DOWNLOAD_PATH` | `./downloads` | Where downloaded files land |
 | `MAX_FILESIZE_MB` | `2000` | Reject files above this |
+| `DATABASE_PATH` | `data/app.db` | SQLite database file path |
+| `COOKIE_ENCRYPTION_KEY` | — | Fernet key for encrypting cookie jars |
 
 ## Docker
 
@@ -81,10 +84,3 @@ cd .. && source venv/bin/activate && python app/main.py                   # Serv
 # OR
 gunicorn -w 1 --threads 1 -b 0.0.0.0:3000 app.main:app
 ```
-
-## Config (app/config.py)
-| Var | Default | Description |
-|---|---|---|
-| `DOWNLOAD_PATH` | `./downloads` | Where downloaded files land |
-| `MAX_FILESIZE_MB` | `2000` | Reject files above this |
-| `DATABASE_PATH` | `data/app.db` | SQLite database file path |
