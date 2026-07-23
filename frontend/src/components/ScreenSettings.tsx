@@ -9,7 +9,6 @@ import {
   deleteDownSession,
   type DownSession,
 } from "../api/downloader";
-import "./ScreenCredentials.css";
 import "./ScreenSettings.css";
 
 export default function ScreenSettings() {

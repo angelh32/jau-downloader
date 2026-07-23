@@ -92,7 +92,12 @@ export default function NavBar({ activeScreen, onNavigate }: NavBarProps) {
       </div>
 
       <div className="sidebar-spacer" />
-
+      {isAuthenticated && (
+        <button className="nav-item nav-item-logout" onClick={logoutUser}>
+          <LogoutIcon />
+          <span>{t("nav.logout")}</span>
+        </button>
+      )}
       <div className="sidebar-footer">
         {isAuthenticated ? (
           <div className="sidebar-user">
@@ -102,9 +107,6 @@ export default function NavBar({ activeScreen, onNavigate }: NavBarProps) {
             <div className="user-info">
               <span className="user-name">{username}</span>
             </div>
-            <button className="logout-icon-btn" onClick={logoutUser} title={t("nav.logout")}>
-              <LogoutIcon />
-            </button>
           </div>
         ) : (
           <button
