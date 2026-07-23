@@ -1,0 +1,33 @@
+.setting-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.setting-row label {
+  font-size: 0.875rem;
+  min-width: 5rem;
+  color: var(--text-secondary);
+}
+
+.setting-row select {
+  background: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  outline: none;
+  min-width: 6rem;
+}
+
+.setting-row select:focus {
+  border-color: var(--primary);
+}
+
+.section-divider {
+  border: none;
+  border-top: 1px solid var(--divider);
+  margin: 1.25rem 0;
+}

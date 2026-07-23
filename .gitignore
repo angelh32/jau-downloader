@@ -11,6 +11,8 @@ data/
 
 # Editor config
 .vscode
+.opencode
+.claude
 
 # Agents and planning
 planning/

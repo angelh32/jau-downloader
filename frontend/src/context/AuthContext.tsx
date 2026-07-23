@@ -11,6 +11,7 @@ import { checkAuth, login, register, logout, type AuthResponse } from "../api/au
 interface AuthContextType {
   isAuthenticated: boolean;
   loading: boolean;
+  username: string | null;
   loginUser: (username: string, password: string) => Promise<AuthResponse>;
   registerUser: (username: string, password: string) => Promise<AuthResponse>;
   logoutUser: () => Promise<void>;
@@ -21,16 +22,27 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [username, setUsername] = useState<string | null>(
+    localStorage.getItem("fdown_user")
+  );
 
   useEffect(() => {
     checkAuth()
-      .then(setIsAuthenticated)
+      .then((ok) => {
+        if (!ok) {
+          localStorage.removeItem("fdown_user");
+          setUsername(null);
+        }
+        setIsAuthenticated(ok);
+      })
       .finally(() => setLoading(false));
   }, []);
 
   const loginUser = useCallback(async (username: string, password: string) => {
     const data = await login(username, password);
     setIsAuthenticated(true);
+    setUsername(data.username ?? username);
+    localStorage.setItem("fdown_user", data.username ?? username);
     return data;
   }, []);
 
@@ -38,6 +50,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     async (username: string, password: string) => {
       const data = await register(username, password);
       setIsAuthenticated(true);
+      setUsername(data.username ?? username);
+      localStorage.setItem("fdown_user", data.username ?? username);
       return data;
     },
     []
@@ -46,11 +60,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logoutUser = useCallback(async () => {
     await logout();
     setIsAuthenticated(false);
+    setUsername(null);
+    localStorage.removeItem("fdown_user");
   }, []);
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, loading, loginUser, registerUser, logoutUser }}
+      value={{ isAuthenticated, loading, username, loginUser, registerUser, logoutUser }}
     >
       {children}
     </AuthContext.Provider>

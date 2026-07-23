@@ -6,7 +6,6 @@
   "nav": {
     "download": "Download",
     "settings": "Settings",
-    "credentials": "Credentials",
     "login": "Login",
     "logout": "Logout"
   },
@@ -64,10 +63,14 @@
     "delete_failed": "Delete failed"
   },
   "settings": {
-    "title": "Settings",
-    "coming_soon": "Coming soon"
+    "title": "Settings"
   },
   "language": {
     "label": "Language"
+  },
+  "theme": {
+    "label": "Theme",
+    "dark": "Dark",
+    "light": "Light"
   }
 }

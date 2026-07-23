@@ -6,7 +6,6 @@
   "nav": {
     "download": "Descargar",
     "settings": "Ajustes",
-    "credentials": "Credenciales",
     "login": "Iniciar sesión",
     "logout": "Cerrar sesión"
   },
@@ -64,10 +63,14 @@
     "delete_failed": "Error al eliminar"
   },
   "settings": {
-    "title": "Ajustes",
-    "coming_soon": "Próximamente"
+    "title": "Ajustes"
   },
   "language": {
     "label": "Idioma"
+  },
+  "theme": {
+    "label": "Tema",
+    "dark": "Oscuro",
+    "light": "Claro"
   }
 }

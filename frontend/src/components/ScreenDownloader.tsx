@@ -109,7 +109,7 @@ export default function ScreenDownloader({
   }
 
   return (
-    <div>
+    <div className="card">
       <div className="input-group">
         <input
           id="url-input"
