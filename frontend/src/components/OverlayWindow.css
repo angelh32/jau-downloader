@@ -1,7 +1,7 @@
 .overlay-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--scrim);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,8 +11,8 @@
 .overlay-modal {
   background: var(--bg-paper);
   border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
   width: 100%;
-  margin: 1rem;
+  margin: var(--space-4);
 }
