@@ -1,77 +1,79 @@
-h2 {
-  margin-bottom: 0.25rem;
-  font-weight: 600;
+.auth-overlay h2 {
+  margin-bottom: var(--space-1);
+  font-weight: var(--font-semibold);
 }
 
-.subtitle {
-  margin-bottom: 1rem;
+.auth-overlay .subtitle {
+  margin-bottom: var(--space-4);
 }
 
 .auth-tabs {
   display: flex;
-  margin-bottom: 1rem;
-  border-radius: 7px;
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-md);
   overflow: hidden;
   border: 1px solid var(--border);
 }
 
 .auth-tab {
   flex: 1;
-  padding: 0.55rem;
+  padding: var(--space-2);
   background: var(--bg-input);
   color: var(--text-secondary);
   border: none;
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background var(--transition-fast);
 }
 
 .auth-tab.active {
   background: var(--primary);
-  color: #fff;
+  color: var(--primary-text);
 }
 
-input {
+.auth-overlay input {
   width: 100%;
-  padding: 0.65rem 0.85rem;
+  padding: var(--space-3) var(--space-3);
   border: 1px solid var(--border);
-  border-radius: 7px;
+  border-radius: var(--radius-md);
   background: var(--bg-input);
   color: var(--text-primary);
-  font-size: 0.9rem;
+  font-size: var(--text-base);
   outline: none;
-  margin-bottom: 0.65rem;
+  margin-bottom: var(--space-3);
   box-sizing: border-box;
+  transition: border-color var(--transition-fast);
 }
 
-input:focus {
+.auth-overlay input:focus {
   border-color: var(--primary);
 }
 
-button[type="submit"] {
+.auth-overlay button[type="submit"] {
   width: 100%;
   background: var(--primary);
-  color: #fff;
-  padding: 0.65rem;
+  color: var(--primary-text);
+  padding: var(--space-3);
   border: none;
-  border-radius: 7px;
-  font-size: 0.875rem;
-  font-weight: 600;
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
   cursor: pointer;
-  margin-top: 0.25rem;
+  margin-top: var(--space-1);
+  transition: opacity var(--transition-fast);
 }
 
-button[type="submit"]:hover {
+.auth-overlay button[type="submit"]:hover {
   opacity: 0.85;
 }
 
-.error {
+.auth-error {
   background: var(--error-bg);
   border: 1px solid var(--error-border);
   color: var(--error);
-  padding: 0.65rem 0.85rem;
-  border-radius: 7px;
-  margin-bottom: 0.65rem;
-  font-size: 0.85rem;
+  padding: var(--space-3) var(--space-3);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-3);
+  font-size: var(--text-sm);
 }

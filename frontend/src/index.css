@@ -1,45 +1,116 @@
 :root {
-  --bg-default: hsl(220, 35%, 3%);
-  --bg-paper: hsl(220, 30%, 7%);
-  --bg-sidebar: hsl(220, 30%, 6%);
-  --bg-input: hsl(220, 35%, 3%);
-  --text-primary: #fff;
-  --text-secondary: hsl(220, 20%, 65%);
-  --border: hsla(220, 20%, 25%, 0.6);
-  --hover: hsla(220, 20%, 35%, 0.2);
+  /* Canvas and surfaces */
+  --bg-default: #0A0A0A;
+  --bg-paper: #111111;
+  --bg-sidebar: #0D0D0D;
+  --bg-input: #161616;
+
+  /* Ink hierarchy - dark canvas uses white ink */
+  --text-primary: #FFFFFF;
+  --text-secondary: rgb(255 255 255 / 56%);
+  --text-tertiary: rgb(255 255 255 / 36%);
+
+  /* Borders */
+  --border: rgb(255 255 255 / 10%);
+  --border-strong: rgb(255 255 255 / 18%);
+  --divider: rgb(255 255 255 / 10%);
+
+  /* Interaction fills */
+  --hover: rgb(255 255 255 / 9%);
+  --pressed: rgb(255 255 255 / 14%);
+  --selected: rgb(255 255 255 / 9%);
+
+  /* Primary accent - restrained blue */
   --primary: hsl(210, 98%, 42%);
-  --primary-light: hsl(210, 98%, 55%);
-  --primary-bg: hsla(210, 100%, 42%, 0.15);
+  --primary-hover: hsl(210, 98%, 48%);
+  --primary-bg: rgb(255 255 255 / 8%);
+  --primary-text: #FFFFFF;
+
+  /* Semantic colors */
   --error: hsl(0, 90%, 65%);
-  --error-bg: hsla(0, 90%, 30%, 0.15);
-  --error-border: hsla(0, 90%, 40%, 0.4);
+  --error-bg: hsla(0, 90%, 30%, 0.12);
+  --error-border: hsla(0, 90%, 40%, 0.35);
+
   --success: hsl(120, 44%, 53%);
-  --success-bg: hsla(120, 59%, 30%, 0.15);
-  --success-border: hsla(120, 44%, 53%, 0.4);
-  --divider: hsla(220, 20%, 25%, 0.6);
-  --scrollbar: hsla(220, 20%, 25%, 0.4);
+  --success-bg: hsla(120, 59%, 30%, 0.12);
+  --success-border: hsla(120, 44%, 53%, 0.35);
+
+  /* Scrim */
+  --scrim: rgb(0 0 0 / 44%);
+
+  /* Spacing scale (8px base) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  /* Font sizes */
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.875rem;
+  --text-lg: 1rem;
+  --text-xl: 1.125rem;
+  --text-2xl: 1.5rem;
+
+  /* Font weights */
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+
+  /* Transitions */
+  --transition-fast: 0.1s ease;
+  --transition-base: 0.15s ease;
 }
 
 [data-theme="light"] {
-  --bg-default: hsl(0, 0%, 99%);
-  --bg-paper: hsl(220, 35%, 97%);
-  --bg-sidebar: hsl(220, 35%, 97%);
-  --bg-input: #fff;
-  --text-primary: hsl(220, 20%, 16%);
-  --text-secondary: hsl(220, 20%, 42%);
-  --border: hsla(220, 20%, 80%, 0.6);
-  --hover: hsla(220, 20%, 80%, 0.3);
-  --primary: hsl(210, 98%, 48%);
-  --primary-light: hsl(210, 98%, 42%);
-  --primary-bg: hsla(210, 98%, 48%, 0.1);
+  /* Canvas and surfaces */
+  --bg-default: #FFFFFF;
+  --bg-paper: #F8F8F8;
+  --bg-sidebar: #F5F5F5;
+  --bg-input: #FFFFFF;
+
+  /* Ink hierarchy - light canvas uses black ink */
+  --text-primary: #000000;
+  --text-secondary: rgb(0 0 0 / 64%);
+  --text-tertiary: rgb(0 0 0 / 44%);
+
+  /* Borders */
+  --border: rgb(0 0 0 / 10%);
+  --border-strong: rgb(0 0 0 / 18%);
+  --divider: rgb(0 0 0 / 10%);
+
+  /* Interaction fills */
+  --hover: rgb(0 0 0 / 5%);
+  --pressed: rgb(0 0 0 / 9%);
+  --selected: rgb(0 0 0 / 5%);
+
+  /* Primary accent */
+  --primary: hsl(210, 98%, 42%);
+  --primary-hover: hsl(210, 98%, 38%);
+  --primary-bg: rgb(0 0 0 / 5%);
+  --primary-text: #FFFFFF;
+
+  /* Semantic colors */
   --error: hsl(0, 90%, 40%);
-  --error-bg: hsla(0, 90%, 40%, 0.08);
-  --error-border: hsla(0, 90%, 40%, 0.25);
+  --error-bg: hsla(0, 90%, 40%, 0.06);
+  --error-border: hsla(0, 90%, 40%, 0.2);
+
   --success: hsl(120, 50%, 35%);
-  --success-bg: hsla(120, 50%, 35%, 0.08);
-  --success-border: hsla(120, 44%, 53%, 0.25);
-  --divider: hsla(220, 20%, 80%, 0.6);
-  --scrollbar: hsla(220, 20%, 60%, 0.3);
+  --success-bg: hsla(120, 50%, 35%, 0.06);
+  --success-border: hsla(120, 44%, 53%, 0.2);
+
+  /* Scrim */
+  --scrim: rgb(0 0 0 / 44%);
 }
 
 * {
@@ -53,6 +124,10 @@ body {
   background: var(--bg-sidebar);
   color: var(--text-primary);
   min-height: 100vh;
+  font-size: var(--text-base);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   transition: background 0.2s, color 0.2s;
 }
 
@@ -66,27 +141,27 @@ body {
 
 .layout {
   display: flex;
-  gap: 1.5rem;
+  gap: var(--space-6);
   align-items: flex-start;
 }
 
 .main-content {
   flex: 1;
   min-width: 0;
-  padding: 1rem;
+  padding: var(--space-4);
 }
 
 h1 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  letter-spacing: -0.3px;
-  margin-bottom: 0.15rem;
+  font-size: var(--text-2xl);
+  font-weight: var(--font-semibold);
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-1);
 }
 
 .subtitle {
   color: var(--text-secondary);
-  font-size: 0.875rem;
-  margin-bottom: 1.25rem;
+  font-size: var(--text-base);
+  margin-bottom: var(--space-5);
 }
 
 button {
@@ -96,14 +171,42 @@ button {
 .card {
   background: var(--bg-paper);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1.25rem;
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
   transition: background 0.2s, border-color 0.2s;
 }
 
-/* .card + .card {
-  margin-top: 0.75rem;
-} */
+/* Focus states */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+input:focus-visible,
+select:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-strong);
+}
 
 @media (max-width: 640px) {
   .layout {
@@ -111,6 +214,6 @@ button {
   }
 
   .container {
-    padding: 1rem;
+    padding: var(--space-3);
   }
 }

@@ -49,52 +49,54 @@ export default function AuthOverlay({ onClose }: AuthOverlayProps) {
 
   return (
     <OverlayWindow onClose={onClose}>
-      <h2>{t("auth.welcome")}</h2>
-      <p className="subtitle">{t("auth.subtitle")}</p>
-      <div className="auth-tabs">
-        <button
-          className={`auth-tab ${tab === "login" ? "active" : ""}`}
-          onClick={() => setTab("login")}
-        >
-          {t("auth.login_tab")}
-        </button>
-        <button
-          className={`auth-tab ${tab === "register" ? "active" : ""}`}
-          onClick={() => setTab("register")}
-        >
-          {t("auth.register_tab")}
-        </button>
+      <div className="auth-overlay">
+        <h2>{t("auth.welcome")}</h2>
+        <p className="subtitle">{t("auth.subtitle")}</p>
+        <div className="auth-tabs">
+          <button
+            className={`auth-tab ${tab === "login" ? "active" : ""}`}
+            onClick={() => setTab("login")}
+          >
+            {t("auth.login_tab")}
+          </button>
+          <button
+            className={`auth-tab ${tab === "register" ? "active" : ""}`}
+            onClick={() => setTab("register")}
+          >
+            {t("auth.register_tab")}
+          </button>
+        </div>
+        {error && <div className="auth-error">{error}</div>}
+        {tab === "login" ? (
+          <form onSubmit={handleLogin}>
+            <input name="username" placeholder={t("auth.username_placeholder")} required />
+            <input
+              name="password"
+              type="password"
+              placeholder={t("auth.password_placeholder")}
+              required
+            />
+            <button type="submit">{t("auth.login_button")}</button>
+          </form>
+        ) : (
+          <form onSubmit={handleRegister}>
+            <input name="username" placeholder={t("auth.username_placeholder")} required />
+            <input
+              name="password"
+              type="password"
+              placeholder={t("auth.password_placeholder")}
+              required
+            />
+            <input
+              name="confirm"
+              type="password"
+              placeholder={t("auth.confirm_placeholder")}
+              required
+            />
+            <button type="submit">{t("auth.register_button")}</button>
+          </form>
+        )}
       </div>
-      {error && <div className="error">{error}</div>}
-      {tab === "login" ? (
-        <form onSubmit={handleLogin}>
-          <input name="username" placeholder={t("auth.username_placeholder")} required />
-          <input
-            name="password"
-            type="password"
-            placeholder={t("auth.password_placeholder")}
-            required
-          />
-          <button type="submit">{t("auth.login_button")}</button>
-        </form>
-      ) : (
-        <form onSubmit={handleRegister}>
-          <input name="username" placeholder={t("auth.username_placeholder")} required />
-          <input
-            name="password"
-            type="password"
-            placeholder={t("auth.password_placeholder")}
-            required
-          />
-          <input
-            name="confirm"
-            type="password"
-            placeholder={t("auth.confirm_placeholder")}
-            required
-          />
-          <button type="submit">{t("auth.register_button")}</button>
-        </form>
-      )}
     </OverlayWindow>
   );
 }
