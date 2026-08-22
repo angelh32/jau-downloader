@@ -16,13 +16,15 @@ Self-hosted web app for downloading videos from YouTube, Facebook, Twitter, Inst
 docker compose up -d --build
 ```
 
-Open `http://localhost:3000`.
+Open `http://localhost:3000`. Register an account (optional), then paste a video URL, pick a quality, and download. Requires Docker and a `.env` file with `DOWNLOAD_PATH=/downloads` (see `docker-compose.yml`).
 
-## Dev
-
+## Developers setup
+Execute the backend and frontend packages installation.
 ```bash
-source venv/bin/activate && pip install -r requirements.txt  # backend
-cd frontend && pnpm install                                    # frontend
+source venv/bin/activate && pip install -r requirements.txt # backend
+```
+```bash
+cd frontend && pnpm install # frontend
 ```
 
 Terminal 1: `source venv/bin/activate && python app/main.py`
